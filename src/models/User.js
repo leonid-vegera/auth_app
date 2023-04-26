@@ -11,6 +11,9 @@ export const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  activationToken: {
+    type: DataTypes.STRING,
+  }
 }, {
   tableName: 'users',
 })

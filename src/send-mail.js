@@ -6,3 +6,5 @@ send({
   subject: 'Test response',
   html: 'You are invited',
 })
+
+/* Тестовый файл */
