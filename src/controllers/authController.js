@@ -1,18 +1,13 @@
 import { User } from '../models/User.js';
-import { v4 as uuidv4 } from 'uuid';
-import { emailService } from '../services/emailService.js';
 import { userService } from '../services/userService.js';
 import { jwtService } from '../services/jwtService.js';
 
 async function register(req, res, next) {
   const { email, password } = req.body;
 
-  const activationToken = uuidv4();
-  const newUser = await User.create({ email, password, activationToken });
+  await userService.register({ email, password });
 
-  await emailService.sendActivationLink(email, activationToken);
-
-  res.send(newUser);
+  res.send({ message: 'OK' });
 }
 
 async function activate(req, res, next) {
