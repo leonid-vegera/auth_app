@@ -20,3 +20,18 @@ export function send({email, subject, html}) {
     html: html, // html body
   });
 }
+
+export function sendActivationLink(email, token) {
+  const link = `${process.env.CLIENT_URL}/activate/${token}`;
+
+  return send({
+    email,
+    subject: 'Account activation',
+    html: `
+      <h1>Account activation</h1>
+      <a href="${link}">${link}</a>
+    `
+  })
+}
+
+export const emailService = { send, sendActivationLink };

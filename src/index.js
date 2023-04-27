@@ -2,8 +2,10 @@
 
 import express from 'express';
 import dotenv from 'dotenv';
-import {authRouter} from "./routes/authRouter.js";
+import { authRouter } from './routes/authRouter.js';
 import cors from 'cors';
+import { userRouter } from './routes/userRouter.js';
+import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
 const app = express();
 
@@ -15,7 +17,11 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json(), authRouter)
+app.use(express.json());
+app.use(authRouter);
+app.use('/users', userRouter);
+app.use(errorMiddleware);
+
 app.listen(PORT, () => {
   console.log(`Server is running on: http://localhost:${PORT}`);
-})
+});
