@@ -20,8 +20,7 @@ function getByEmail(email) {
 }
 
 async function register({ email, password }) {
-  const existingUser = getByEmail(email);
-  console.log('existingUser', existingUser);
+  const existingUser = await getByEmail(email);
 
   if (existingUser) {
     throw ApiError.BadRequest('Email already exists', {
