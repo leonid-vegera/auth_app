@@ -2,6 +2,7 @@ import { User } from '../models/User.js';
 import { userService } from '../services/userService.js';
 import { jwtService } from '../services/jwtService.js';
 import { ApiError } from '../exceptions/ApiError.js';
+import bcrypt from 'bcrypt';
 
 function validateEmail(value) {
   if (!value) {
@@ -66,10 +67,14 @@ async function login(req, res, next) {
   const { email, password } = req.body;
 
   const user = await userService.getByEmail(email);
+  if (!user) {
+    throw ApiError.BadRequest('This email does not exist');
+  }
 
-  if (password !== user.password) {
-    res.sendStatus(401);
-    return;
+  const isPassworValid = await bcrypt.compare(password, user.password);
+
+  if (!isPassworValid) {
+    throw ApiError.BadRequest('Password is wrong');
   }
 
   const userData = userService.normalize(user);
