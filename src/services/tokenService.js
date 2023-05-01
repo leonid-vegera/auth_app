@@ -20,4 +20,10 @@ async function getByToken(refreshToken) {
   });
 }
 
-export const tokenService = { save, getByToken };
+async function remove(userId) {
+  await Token.destroy({
+    where: { userId }
+  });
+}
+
+export const tokenService = { save, getByToken, remove };
