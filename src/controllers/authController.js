@@ -72,9 +72,9 @@ async function login(req, res, next) {
     throw ApiError.BadRequest('This email does not exist');
   }
 
-  const isPassworValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  if (!isPassworValid) {
+  if (!isPasswordValid) {
     throw ApiError.BadRequest('Password is wrong');
   }
 
@@ -117,4 +117,17 @@ async function sendAuthentication(res, user) {
   });
 }
 
-export const authController = { register, activate, login, refresh };
+async function logout(req, res, next) {
+  const { refreshToken } = req.cookies;
+  const userData = jwtService.validateRefreshToken(refreshToken);
+
+  res.clearCookie('refreshToken');
+
+  if (userData) {
+    await tokenService.remove(userData.id);
+  }
+  
+  res.sendStatus(204);
+}
+
+export const authController = { register, activate, login, refresh, logout };
